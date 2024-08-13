@@ -37,68 +37,43 @@ export const TRANSACTION_STATUS = {
   BRIDGE_SUCCESS: 'bridge_success',
 };
 
-export const getTransactionImage = transaction => {
-  const object = transaction;
-  switch (object) {
-    case 'sent':
-      return IconTransactionSent;
-    case 'received':
-      return IconTransactionReceived;
-    case 'swap':
-      return IconTransactionSwap;
-    case 'interaction':
-      return IconTransactionInteraction;
-    case 'paid':
-      return IconTransactionPaid;
-    case 'unknown':
-      return IconTransactionUnknown;
-    case 'success':
-      return IconTransactionResultSuccess;
-    case 'warning':
-      return IconTransactionResultWarning;
-    case 'fail':
-      return IconTransactionResultFail;
-    case 'creating':
-      return IconTransactionCreating;
-    case 'sending':
-      return IconTransactionSending;
-    case 'inProgress':
-      return IconTransactionSending;
-    case 'swapping':
-      return IconTransactionSending;
-    case 'listing':
-      return IconTransactionSending;
-    case 'unlisting':
-      return IconTransactionSending;
-    case 'creating-offer':
-      return IconTransactionSending;
-    case 'canceling-offer':
-      return IconTransactionSending;
-    case 'buying':
-      return IconTransactionSending;
-    case 'burning':
-      return IconTransactionSending;
-    default:
-      return IconTransactionSent;
-  }
+const transactionIcons = {
+  sent: IconTransactionSent,
+  received: IconTransactionReceived,
+  swap: IconTransactionSwap,
+  interaction: IconTransactionInteraction,
+  paid: IconTransactionPaid,
+  unknown: IconTransactionUnknown,
+  success: IconTransactionResultSuccess,
+  warning: IconTransactionResultWarning,
+  fail: IconTransactionResultFail,
+  creating: IconTransactionCreating,
+  sending: IconTransactionSending,
+  inProgress: IconTransactionSending,
+  swapping: IconTransactionSending,
+  listing: IconTransactionSending,
+  unlisting: IconTransactionSending,
+  'creating-offer': IconTransactionSending,
+  'canceling-offer': IconTransactionSending,
+  buying: IconTransactionSending,
+  burning: IconTransactionSending,
 };
 
-export const getNonListedTokens = (balance, nfts) =>
-  balance.items?.filter(
-    tok => !tok.name && !!Object.values(nfts).includes(tok.mint),
-  );
 
-export const getListedTokens = balance =>
-  balance.items?.filter(tok => tok.name);
+export const getTransactionImage = (transactionType) =>
+  transactionIcons[transactionType] || IconTransactionSent;
+
+export const getNonListedTokens = (balance, nfts) =>
+  balance.items?.filter((token) => !token.name && Object.values(nfts).includes(token.mint));
+
+export const getListedTokens = (balance) =>
+  balance.items?.filter((token) => token.name);
 
 export const mergeImportedTokens = (tokens, activeTokens) =>
-  tokens.filter(token => {
+  tokens.filter((token) => {
     if (token.amount > 0 || token.address === 'eth') {
       return true;
     }
     const importedToken = activeTokens[token.address];
-    if (importedToken && importedToken.imported) {
-      return true;
-    }
-    return false;
+    return importedToken?.imported || false;
   });
